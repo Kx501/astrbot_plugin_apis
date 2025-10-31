@@ -1,32 +1,20 @@
-<div align="center">
-
-![:name](https://count.getloli.com/@astrbot_plugin_apis?name=astrbot_plugin_apis&theme=minecraft&padding=6&offset=0&align=top&scale=1&pixelated=1&darkmode=auto)
-
-# astrbot_plugin_apis
-
-_✨ [astrbot](https://github.com/Soulter/AstrBot) API聚合插件 ✨_
-
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![AstrBot](https://img.shields.io/badge/AstrBot-3.4%2B-orange.svg)](https://github.com/Soulter/AstrBot)
-[![GitHub](https://img.shields.io/badge/作者-Zhalslar-blue)](https://github.com/Zhalslar)
-
-</div>
+# astrbot_plugin_apis_fork
 
 ## 💡 介绍
 
 API聚合插件，海量免费API动态添加，热门API：看看腿、看看腹肌...
 
+fork 自 [Zhalslar的原始版本](https://github.com/Zhalslar/astrbot_plugin_apis)
+
 ## 📦 安装
 
-- 可以直接在astrbot的插件市场搜索astrbot_plugin_apis，点击安装即可  
-
-- 或者可以直接克隆源码到插件文件夹：
+- 从链接安装 https://github.com/Kx501/astrbot_plugin_apis
+- 或者直接克隆源码到插件文件夹：
 
 ```bash
 # 克隆仓库到插件目录
 cd /AstrBot/data/plugins
-git clone https://github.com/Zhalslar/astrbot_plugin_apis
+git clone https://github.com/Kx501/astrbot_plugin_apis
 
 # 控制台重启AstrBot
 ```
@@ -39,7 +27,7 @@ git clone https://github.com/Zhalslar/astrbot_plugin_apis
 
 ### Docker 部署配置
 
-如果您是 Docker 部署，消息平台容器（如Napcat）、astrbot容器都要挂载宿主机中apis插件的数据目录（...data/plugins_data/astrbot_plugin_apis）
+如果您是 Docker 部署，消息平台容器（如Napcat）、astrbot容器都要挂载宿主机中apis插件的数据目录（...data/plugins_data/astrbot_plugin_apis_fork）
 
 示例挂载方式(NapCat)：
 
@@ -50,15 +38,15 @@ git clone https://github.com/Zhalslar/astrbot_plugin_apis
 
 ## ⌨️ 使用说明
 
-部分api站点需要密钥，如 倾梦API：<https://api.317ak.cn>， 此站点需前往网页，注册账号，获取ckey密钥，填入插件配置中的“api密钥 (api_keys)”
+部分api站点需要密钥，如 倾梦API：[https://api.317ak.cn](https://api.317ak.cn)， 此站点需前往网页，注册账号，获取ckey密钥，填入插件配置中的“api密钥 (api_keys)”
 
 ### 指令表
 
-|     命令      |        说明        |
-|:-------------:|:--------------------------:|
-| api详情 xxx  | 具体查看某个api的参数，不提供参数时查看所有能触发api的关键词 |
-| 删除api xxx  | 删除指定api        |
-|   {关键词}     |   触发api      |
+|    命令    |                             说明                             |
+| :---------: | :----------------------------------------------------------: |
+| api详情 xxx | 具体查看某个api的参数，不提供参数时查看所有能触发api的关键词 |
+| 删除api xxx |                         删除指定api                         |
+|  {关键词}  |                           触发api                           |
 
 建议直接通过编辑"data\plugins\astrbot_plugin_apis\api_data.json"进行添加api、删除api，同时也方便修改更多参数。
 
@@ -139,16 +127,15 @@ git clone https://github.com/Zhalslar/astrbot_plugin_apis
 ![5123084b9e5a5f9371db19224575a43](https://github.com/user-attachments/assets/73c38cc2-49b8-4d67-b48e-77cd28b1fd81)
 ![c37bb35479df19aa2da40d6a13eea564](https://github.com/user-attachments/assets/b8e6682a-1c0b-4743-86eb-b7ed39344a17)
 
-
 ## 📌 TODO
 
-- [x] 实现api统一存储、调用
-- [x] 支持动态添加、删除api
-- [x] 自动保存api返回的数据
-- [x] api失效时采用本地数据
-- [x] api详情、api列表
-- [x] 自动解析部分api返回的json格式数据
-- [x] 支持一个api对应多个触发词
+- [X] 实现api统一存储、调用
+- [X] 支持动态添加、删除api
+- [X] 自动保存api返回的数据
+- [X] api失效时采用本地数据
+- [X] api详情、api列表
+- [X] 自动解析部分api返回的json格式数据
+- [X] 支持一个api对应多个触发词
 
 ## 👥 贡献指南
 
@@ -163,17 +150,16 @@ git clone https://github.com/Zhalslar/astrbot_plugin_apis
 - Docker容器部署的astrbot要配置好路径映射，否则无法发送图片、视频、音频，不会配置映射的建议不要用docker部署。
 - 海外服务器可能无法直接访问大部分API，网络问题自行解决。
 - 收录的某些API可能并不稳定，存在失效的情况，属于正常现象。
-- 如果想第一时间得到反馈，可以来作者的插件反馈群（QQ群）：460973561（不点star不给进）
 
 ## 🤝 鸣谢
 
 本插件收录的免费api大多来自下面的站点，希望有能力的使用者可以赞助一下。另外如有某个api失效，可在各站点间找平替。
 
-- 枫林API：<https://api.yuafeng.cn>
-- 稳定API：<https://api.xingchenfu.xyz>
-- 倾梦API：<https://api.317ak.cn>， 此站点需注册账号获取ckey密钥！！
-- 星之阁API：<https://api.xingzhige.com>
-- 桑帛云API：<https://api.lolimi.cn>
-- 糖豆子API：<https://api.tangdouz.com>
-- PearAPI：<https://api.pearktrue.cn>
-- 问情免费API：<https://free.wqwlkj.cn>
+- 枫林API：[https://api.yuafeng.cn](https://api.yuafeng.cn)
+- 稳定API：[https://api.xingchenfu.xyz](https://api.xingchenfu.xyz)
+- 倾梦API：[https://api.317ak.cn](https://api.317ak.cn)， 此站点需注册账号获取ckey密钥！！
+- 星之阁API：[https://api.xingzhige.com](https://api.xingzhige.com)
+- 桑帛云API：[https://api.lolimi.cn](https://api.lolimi.cn)
+- 糖豆子API：[https://api.tangdouz.com](https://api.tangdouz.com)
+- PearAPI：[https://api.pearktrue.cn](https://api.pearktrue.cn)
+- 问情免费API：[https://free.wqwlkj.cn](https://free.wqwlkj.cn)

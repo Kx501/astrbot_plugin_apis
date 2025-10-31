@@ -1,68 +1,45 @@
 {
+  "enabled_types": {
+    "description": "启用的API类型",
+    "type": "list",
+    "options": ["text", "image", "video", "audio"],
+    "default": ["text", "image", "video", "audio"],
+    "hint": "选择要启用的API数据类型（text=文本、image=图片、video=视频、audio=音频）"
+  },
+  "api_keys": {
+    "description": "站点API密钥",
+    "type": "list",
+    "default": [],
+    "hint": "部分API站点需要密钥才能访问，格式：站点域名:密钥\n例如：https://api.317ak.cn:your_key_here"
+  },
+    "disabled_sites": {
+      "description": "禁用的API站点",
+      "type": "list",
+      "default": [],
+      "hint": "禁用的API站点域名列表，将禁用来自这些站点的所有API功能\n例如：https://api.example.com"
+    },
+  "disabled_apis": {
+    "description": "禁用的API功能",
+    "type": "list",
+    "default": [],
+    "hint": "禁用的API功能列表，填写API触发词即可禁用该功能\n例如：讲个笑话、看看腿"
+  },
+  "prefix_mode": {
+    "description": "前缀模式",
+    "type": "bool",
+    "default": false,
+    "hint": "启用后，需要在触发词前加上前缀或@bot才能触发"
+  },
+  "auto_save": {
+    "description": "自动保存API响应",
+    "type": "bool",
+    "default": true,
+    "hint": "建议开启，当API站点失效时可使用本地缓存数据"
+  },
   "debug": {
     "description": "调试模式",
     "type": "bool",
     "default": false,
-    "hint": "如果添加api时报错，试着打开debug找问题, 报错信息将上报消息平台"
-  },
-  "auto_save_data": {
-    "description": "保存API响应数据",
-    "hint": "建议保存，当api失效时可换用本地数据。如果你存储空间紧张则建议不保存",
-    "type": "bool",
-    "default": true
-  },
-  "prefix_mode": {
-    "description": "前缀模式",
-    "hint": "启用后，需要在触发词前加上前缀或者@bot才能触发api",
-    "type": "bool",
-    "default": false
-  },
-  "type_switch": {
-    "description": "类型开关",
-    "type": "object",
-    "items": {
-      "enable_text": {
-        "description": "是否启用文本api",
-        "type": "bool",
-        "default": true
-      },
-      "enable_image": {
-        "description": "是否启用图片api",
-        "type": "bool",
-        "default": true
-      },
-      "enable_video": {
-        "description": "是否启用视频api",
-        "type": "bool",
-        "default": true
-      },
-      "enable_audio": {
-        "description": "是否启用音频api",
-        "type": "bool",
-        "default": true
-      }
-    }
-  },
-  "api_keys": {
-    "description": "api密钥",
-    "hint": "部分api站点需要密钥访问，请在对应网站注册账号拿到密钥后填在此配置项中, 格式为 https://your.api.com:your_api_key (即站点域名:密钥)",
-    "type": "list",
-    "default": [
-      "http://api.317ak.cn:api_key"
-    ]
-  },
-  "disable_sites": {
-    "description": "禁用的api站点",
-    "hint": "禁用列表内的api站点会被屏蔽，从而禁止访问",
-    "type": "list",
-    "default": [
-      "https://your.api.com"
-    ]
-  },
-  "disable_apis": {
-    "description": "禁用的api",
-    "hint": "禁用列表内的关键词会被屏蔽，从而达到不能触发api的效果",
-    "type": "list",
-    "default": []
+    "hint": "开启后会输出详细错误信息"
   }
 }

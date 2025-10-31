@@ -11,8 +11,9 @@ from .utils import dict_to_string, extract_url, get_nested_value, parse_api_keys
 class RequestManager:
     def __init__(self, config: AstrBotConfig, api_manager: APIManager) -> None:
         self.session = aiohttp.ClientSession()
-        # api密钥字典
-        self.api_key_dict = parse_api_keys(config.get("api_keys", []).copy())
+        # api密钥字典（从列表格式解析）
+        api_keys_list = config.get("api_keys", [])
+        self.api_key_dict = parse_api_keys(api_keys_list)
         self.api_sites = list(self.api_key_dict.keys())
         self.api = api_manager
 
@@ -79,16 +80,17 @@ class RequestManager:
 
     async def batch_test_apis(self) -> tuple[list[str], list[str]]:
         """
-        将每个 URL 都作为独立测试项按站点分组；每轮从每个站点 pop 一个 URL 并发测试，直到所有 URL 测完。
-        返回 (abled_api_list, disabled_api_list)
+        批量测试所有API功能的可用性。
+        将每个请求地址按API站点分组；每轮从每个站点取一个地址并发测试。
+        返回 (可用的API功能列表, 失效的API功能列表)
         """
-        # 1) 展平每个 API 的所有 URL -> 按 site 分组
-        site_to_entries = defaultdict(list)  # site -> list of entries
+        # 1) 展平每个API功能的所有请求地址 -> 按站点分组
+        site_to_entries = defaultdict(list)  # 站点域名 -> 测试项列表
         for api_name, api_data in self.api.apis.items():
             url = api_data["url"]
             urls = [url] if isinstance(url, str) else url
             for u in urls:
-                site = self.api.extract_base_url(u)
+                site = self.api.extract_base_url(u)  # 提取站点域名
                 site_to_entries[site].append(
                     {
                         "api_name": api_name,
@@ -97,10 +99,10 @@ class RequestManager:
                     }
                 )
 
-        # 2) 记录每个 API 是否已成功（任一 URL 成功即为成功）
+        # 2) 记录每个API功能是否已成功（任一请求地址成功即为成功）
         api_succeeded = dict.fromkeys(self.api.apis.keys(), False)
 
-        # 3) 按轮次从每个站点各取一个 URL 并发测试，直到所有站点的 entry 列表空
+        # 3) 按轮次从每个站点各取一个请求地址并发测试，直到所有站点的测试项列表空
         while any(site_to_entries.values()):
             batch = []
             for site, entries in list(site_to_entries.items()):
@@ -109,9 +111,9 @@ class RequestManager:
                     break
 
             if not batch:
-                break  # 没有需要测试的 entry 了
+                break  # 没有需要测试的项目了
 
-            # 并发测试这一轮的所有 URL
+            # 并发测试这一轮的所有请求地址
             tasks = [self.request([e["url"]], e["params"], True) for e in batch]
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -122,7 +124,7 @@ class RequestManager:
                 else:
                     api_succeeded[entry["api_name"]] = True
 
-        # 4) 汇总
+        # 4) 汇总：返回可用的和失效的API功能列表
         abled = [k for k, v in api_succeeded.items() if v]
         disabled = [k for k, v in api_succeeded.items() if not v]
         return abled, disabled
