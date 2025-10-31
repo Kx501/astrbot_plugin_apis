@@ -12,12 +12,12 @@
     "default": [],
     "hint": "部分API站点需要密钥才能访问，格式：站点域名:密钥\n例如：https://api.317ak.cn:your_key_here"
   },
-    "disabled_sites": {
-      "description": "禁用的API站点",
-      "type": "list",
-      "default": [],
-      "hint": "禁用的API站点域名列表，将禁用来自这些站点的所有API功能\n例如：https://api.example.com"
-    },
+  "disabled_sites": {
+    "description": "禁用的API站点",
+    "type": "list",
+    "default": [],
+    "hint": "禁用的API站点域名列表，将禁用来自这些站点的所有API功能\n例如：https://api.example.com"
+  },
   "disabled_apis": {
     "description": "禁用的API功能",
     "type": "list",

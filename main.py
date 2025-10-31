@@ -294,30 +294,48 @@ class APIsPlugin(Star):
         """在系统提示词中注入API触发词列表（使用符号包裹格式）"""
         api_list = self._generate_api_list()
         if api_list:
-            req.system_prompt += f"\n可用API（使用[[触发词]]调用，如[[讲个笑话]]）:{api_list}"
+            req.system_prompt += f"""
+
+你可以通过以下方式调用API功能来增强回复：
+
+调用格式：在消息中插入`[[讲个笑话]]`、`[[生成图片]]`等触发词，会返回文本、图片、视频或音频。
+
+可用触发词列表：
+{api_list}
+
+注意：只在明确需要调用API时才使用，确保调用格式正确。"""
 
     @filter.on_llm_response()
     async def extract_api_from_response(self, event: AstrMessageEvent, resp: LLMResponse):
         """从LLM回复中提取[[触发词]]格式并调用对应的API功能，将结果整合到回复中"""
         import re
         
-        # 获取回复文本
-        reply_text = resp.completion_text if hasattr(resp, 'completion_text') else ""
-        if not reply_text and hasattr(resp, 'result_chain') and resp.result_chain:
-            # 从消息链中提取文本
+        # 获取回复文本：优先从completion_text获取
+        reply_text = ""
+        
+        if resp.completion_text and resp.completion_text.strip():
+            reply_text = resp.completion_text
+        elif hasattr(resp, 'result_chain') and resp.result_chain:
+            # 如果completion_text为空，尝试从result_chain中提取
             from astrbot.api.message_components import Plain
             text_parts = [seg.text for seg in resp.result_chain.chain if isinstance(seg, Plain)]
             reply_text = "".join(text_parts)
         
-        if not reply_text:
+        if not reply_text or not reply_text.strip():
+            logger.debug("extract_api_from_response: 回复文本为空，跳过处理")
             return
+        
+        logger.debug(f"extract_api_from_response: 开始处理回复文本: {reply_text[:200]}...")
         
         # 提取所有[[...]]包裹的内容
         pattern = r'\[\[([^\]]+)\]\]'
         matches = re.findall(pattern, reply_text)
         
         if not matches:
+            logger.debug("extract_api_from_response: 未找到[[...]]格式的API调用")
             return
+        
+        logger.debug(f"extract_api_from_response: 找到 {len(matches)} 个API调用标记: {matches}")
         
         # 防重复：记录已调用的API
         called_apis = set()
@@ -330,14 +348,17 @@ class APIsPlugin(Star):
                 continue
             
             # 匹配API功能（支持优先级选择）
+            logger.debug(f"extract_api_from_response: 尝试匹配API功能，触发词='{api_name}'")
             api_data = self.api.match_api_by_name(api_name)
             if not api_data:
-                logger.debug(f"未找到匹配的API功能: {api_name}")
+                logger.warning(f"extract_api_from_response: 未找到匹配的API功能，触发词='{api_name}'")
                 continue
+            
+            logger.debug(f"extract_api_from_response: 匹配到API功能 '{api_data['name']}'，类型={api_data['type']}")
             
             # 检查API数据类型是否启用
             if api_data["type"] not in self.enable_api_type:
-                logger.debug(f"API数据类型 [{api_data['type']}] 已被禁用")
+                logger.warning(f"extract_api_from_response: API数据类型 [{api_data['type']}] 已被禁用，启用的类型={self.enable_api_type}")
                 continue
             
             called_apis.add(api_name)
